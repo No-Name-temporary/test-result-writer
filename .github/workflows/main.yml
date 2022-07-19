@@ -26,5 +26,5 @@ jobs:
           npm ci
       - name: deploy
         run: |
-          zip -r test-runner.zip .
-          aws lambda update-function-code --function-name=test-runner --zip-file=fileb://test-runner.zip 
+          zip -r test-result-writer.zip .
+          aws lambda update-function-code --function-name=test-result-writer --zip-file=fileb://test-result-writer.zip 
