@@ -1,6 +1,12 @@
 class TestResult {
-  constructor({ title, results }) {
+  constructor({
+    title, responseStatus, responseBody, responseHeaders, results,
+  }) {
     this.testName = title;
+    this.responseStatus = responseStatus;
+    this.responseTime = responseHeaders['request-duration'];
+    this.responseBody = responseBody;
+    this.responseHeaders = responseHeaders;
     this.addKeyToAssertionResults(results);
   }
 
