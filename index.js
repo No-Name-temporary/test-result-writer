@@ -32,7 +32,7 @@ exports.handler = async (event) => {
   const regionMetadata = await getRegionByAWSName({ awsRegionName: sqsMessage.awsRegion });
   const testRunsResult = await insertTestRunData({
     testId: testMetadata.id,
-    passStatus: !failedTests,
+    success: !failedTests,
     regionId: regionMetadata.id,
     responseStatus: testResult.responseStatus,
     responseTime: testResult.responseTime,
