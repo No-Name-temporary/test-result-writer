@@ -47,7 +47,7 @@ exports.handler = async (event) => {
       testRunId,
       assertionId: testAssertion.id,
       actualValue: assertionResult.actualValue,
-      pass: assertionResult.success,
+      success: assertionResult.success,
     });
   });
 
