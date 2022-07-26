@@ -15,9 +15,11 @@ exports.handler = async (event) => {
   const sqsMessage = new SqsMessage(event);
   console.log('sqsMessage.message -->', sqsMessage.message);
   const testResult = new TestResult(sqsMessage.message);
+  const failedTests = failedTestScreener(sqsMessage.message.results);
 
-  console.log('Failed Assertions Present? ', failedTestScreener(sqsMessage.message.results));
-  if (failedTestScreener(sqsMessage.message.results)) {
+  console.log('Failed Assertions Present? ', failedTests);
+
+  if (failedTests) {
     try {
       invokeTestAlerts(sqsMessage.message);
     } catch (e) {
@@ -30,7 +32,12 @@ exports.handler = async (event) => {
   const regionMetadata = await getRegionByAWSName({ awsRegionName: sqsMessage.awsRegion });
   const testRunsResult = await insertTestRunData({
     testId: testMetadata.id,
+    passStatus: !failedTests,
     regionId: regionMetadata.id,
+    responseStatus: testResult.responseStatus,
+    responseTime: testResult.responseTime,
+    responseBody: testResult.responseBody,
+    responseHeaders: testResult.responseHeaders,
   });
   const testRunId = testRunsResult.rows[0].id;
   const testAssertions = await getAssertionsByTestId({ testId: testMetadata.id });
