@@ -36,8 +36,8 @@ exports.handler = async (event) => {
     regionId: regionMetadata.id,
     responseStatus: testResult.responseStatus,
     responseTime: testResult.responseTime,
-    responseBody: testResult.responseBody,
-    responseHeaders: testResult.responseHeaders,
+    responseBody: JSON.stringify(testResult.responseBody),
+    responseHeaders: JSON.stringify(testResult.responseHeaders),
   });
   const testRunId = testRunsResult.rows[0].id;
   const testAssertions = await getAssertionsByTestId({ testId: testMetadata.id });
