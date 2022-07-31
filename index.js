@@ -28,10 +28,9 @@ exports.handler = async (event) => {
   }
 
   // TODO: move to class(es) and optimize to use way fewer database operations
-  const testMetadata = await getTestByName({ testName: testResult.testName });
   const regionMetadata = await getRegionByAWSName({ awsRegionName: sqsMessage.awsRegion });
   const testRunsResult = await insertTestRunData({
-    testId: testMetadata.id,
+    testId: testResult.testId,
     success: !failedTests,
     regionId: regionMetadata.id,
     responseStatus: testResult.responseStatus,
@@ -40,9 +39,10 @@ exports.handler = async (event) => {
     responseHeaders: JSON.stringify(testResult.responseHeaders),
   });
   const testRunId = testRunsResult.rows[0].id;
-  const testAssertions = await getAssertionsByTestId({ testId: testMetadata.id });
+  const testAssertions = await getAssertionsByTestId({ testId: testResult.testId });
+
   testAssertions.forEach((testAssertion) => {
-    const assertionResult = testResult.assertionResults[testAssertion.type];
+    const assertionResult = testResult.assertionResults[testAssertion.id];
     insertAssertionResultData({
       testRunId,
       assertionId: testAssertion.id,

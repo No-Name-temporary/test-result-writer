@@ -1,7 +1,8 @@
 class TestResult {
   constructor({
-    title, responseStatus, responseBody, responseHeaders, results,
+    testId, title, responseStatus, responseBody, responseHeaders, results,
   }) {
+    this.testId = testId;
     this.testName = title;
     this.responseStatus = responseStatus;
     this.responseTime = responseHeaders['request-duration'];
@@ -15,7 +16,7 @@ class TestResult {
     if (results) {
       const assertionResults = {};
       results.forEach((result) => {
-        assertionResults[result.assertionType] = result;
+        assertionResults[result.assertionId] = result;
       });
       this.assertionResults = assertionResults;
     }
