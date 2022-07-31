@@ -1,7 +1,8 @@
 class TestResult {
   constructor({
-    title, responseStatus, responseBody, responseHeaders, results,
+    testId, title, responseStatus, responseBody, responseHeaders, results,
   }) {
+    this.testId = testId;
     this.testName = title;
     this.responseStatus = responseStatus;
     this.responseTime = responseHeaders['request-duration'];
