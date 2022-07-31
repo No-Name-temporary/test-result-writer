@@ -15,7 +15,6 @@ exports.handler = async (event) => {
   const sqsMessage = new SqsMessage(event);
   console.log('sqsMessage.message -->', sqsMessage.message);
   const testResult = new TestResult(sqsMessage.message);
-  console.log('***TEST ID****', testResult.testId);
   const failedTests = failedTestScreener(sqsMessage.message.results);
 
   console.log('Failed Assertions Present? ', failedTests);
