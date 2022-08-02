@@ -1,7 +1,6 @@
 const SqsMessage = require('./entities/SqsMessage');
 const TestResult = require('./entities/TestResult');
 const {
-  getTestByName,
   getRegionByAWSName,
   insertTestRunData,
   getAssertionsByTestId,
@@ -27,7 +26,6 @@ exports.handler = async (event) => {
     }
   }
 
-  // TODO: move to class(es) and optimize to use way fewer database operations
   const regionMetadata = await getRegionByAWSName({ awsRegionName: sqsMessage.awsRegion });
   const testRunsResult = await insertTestRunData({
     testId: testResult.testId,
@@ -39,15 +37,13 @@ exports.handler = async (event) => {
     responseHeaders: JSON.stringify(testResult.responseHeaders),
   });
   const testRunId = testRunsResult.rows[0].id;
-  const testAssertions = await getAssertionsByTestId({ testId: testResult.testId });
 
-  testAssertions.forEach((testAssertion) => {
-    const assertionResult = testResult.assertionResults[testAssertion.id];
+  testResult.results.forEach((result) => {
     insertAssertionResultData({
       testRunId,
-      assertionId: testAssertion.id,
-      actualValue: assertionResult.actualValue,
-      success: assertionResult.success,
+      assertionId: result.assertionId,
+      actualValue: result.actualValue,
+      success: result.success,
     });
   });
 
