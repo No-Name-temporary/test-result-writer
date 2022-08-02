@@ -3,7 +3,6 @@ const TestResult = require('./entities/TestResult');
 const {
   getRegionByAWSName,
   insertTestRunData,
-  getAssertionsByTestId,
   insertAssertionResultData,
 } = require('./lib/db_query');
 require('dotenv').config();
@@ -36,6 +35,7 @@ exports.handler = async (event) => {
     responseBody: JSON.stringify(testResult.responseBody),
     responseHeaders: JSON.stringify(testResult.responseHeaders),
   });
+
   const testRunId = testRunsResult.rows[0].id;
 
   testResult.results.forEach((result) => {
